@@ -57,7 +57,7 @@ WHERE TelNr <> '1234/34534654' --Not equal to
 WHERE Nachname LIKE 'W%';
 ```
 ##### IN-Anweisung
-* Die Menge nach "IN" enthällt Konstanten oder eine Unterabfrage.
+* Die Menge nach "IN" enthält Konstanten oder eine Unterabfrage.
 * Alle Konstanten haben den gleichen Datentyp.
 * Die Menge darf nicht zwei gleiche Konstanten enthalten.
 ```sql
@@ -77,8 +77,8 @@ WHERE Gehalt BETWEEN 3000 AND 6000;
 WHERE EXISTS (SELECT ProductName FROM Products WHERE Products.SupplierID = Suppliers.supplierID AND Price < 20); 
 ```
 #### 2.1.4. GROUP-BY
-* Die SQL-Klausel GROUP BY wird verwendet, um identische Daten anhand einer oder mehrerer Spalten in Gruppen zu ordnen. 
-* Sie wird häufig mit Gruppenfunktionen wie COUNT(), SUM(), ... verwendet, um Berechnungen für jede Datengruppe durchzuführen.
+* wird verwendet, um identische Daten anhand einer oder mehrerer Spalten in Gruppen zu ordnen. 
+* häufig mit Gruppenfunktionen wie COUNT(), SUM(), ... verwendet, um Berechnungen für jede Datengruppe durchzuführen.
 ```sql
 SELECT Student, SUM(Score)
 FROM Marks
@@ -99,8 +99,8 @@ ORDER BY Verkaufspreis [ASC | DESC]
 ORDER BY Verkaufspreis, artikel_typ
 ```
 #### 2.1.5 GROUP-BY / HAVING
-* Es darf kein WHERE-Ausdruck verwendet werden beim Benutzen vom GROUP-BY. HAVING nutzen.
-* In der Ausgabe wird über die GROUP-BY-Spalten aufsteigend sortiert.
+* kein WHERE-Ausdruck beim Benutzen vom GROUP-BY. HAVING nutzen.
+* Ausgabe wird über die GROUP-BY-Spalten aufsteigend sortiert.
 ### 2.2. Fehler-Handling
 #### 2.3.1. IMMEDIATE
 Alle Befehle werden ausgeführt, wenn ein Fehler auftritt wird nur dieser Befehl nicht ausgeführt.
@@ -136,7 +136,7 @@ CREATE TABLE test(
 ```
 
 ```sql
--- Foraign Key Contraint kann auch nach der CREATE-Anweisung mittels ALTER Table hinzugefügt.
+-- Foreign Key Contraint kann auch nach CREATE-Anweisung mit ALTER Table hinzugefügt werden.
 ALTER TABLE <table-name> 
 ADD CONSTRAINT <contr-name> FORAIGN KEY (<pr-key>, [...])
 REFERENCES <table-name>(<spalte-1>, [...]);
@@ -154,14 +154,14 @@ WHERE <Bedingung>
 DELETE * FROM <table-name>
 ```
 ### 2.8. ALTER-Anweisung
-```spl
+```sql
 -- Spalten Bearbeiten
 ALTER TABLE <name> ADD (<Spalten-name>  <data-type>)
 ALTER TABLE <name> DROP (<Spalten-name>)
 
 -- Constraints Bearbeiten
-ALTER TABLE <name> ADD CONSTRAINT <contr-name> ...
-ALTER TABLE <name> DROP CONSTRAINT <contr-name>
+ALTER TABLE <name> ADD CONSTRAINT <cstr-name> ...
+ALTER TABLE <name> DROP CONSTRAINT <cstr-name>
 
 ALTER TABLE <name> MODIFY 
 ALTER TABLE <name> ENABLE 
@@ -186,7 +186,7 @@ INSERT INTO <table-name> (spalte-1, ...)
 ### 2.10. UPDATE-Anweisung
 ```sql
 UPDATE <table-name> 
-SET <table-column> = 100 / SET <table-column> = <table-column> * 100
+SET <table-column> = 100 --or SET <table-column> = <table-column> * 100
 WHERE <table-column> = 5;
 
 UPDATE <table-name>
@@ -198,18 +198,18 @@ RENAME <old-table-name> TO <new-table-name>;
 ```
 ### 2.5. CREATE-Table-Anweisung
 ```sql
-CREATE TABLE <Tabellen-Name>(
-    <Attr-name> <Datentyp>,
+CREATE TABLE <table-name>(
+    <attr-name> <type>,
     ...
 );
 ```
 ### 2.9. CREATE-INDEX-Anweisung
 ```sql
 CREATE [UNIQUE] INDEX
-<index-name> ON <Tabellenname>
-(<spalten-name> [, <spalten-name> ...] )
+<index-name> ON <table-name>
+(<column-name> [, <column-name> ...] )
 ```
-#### 2.9.1. Regeln
+#### 2.9.1. Regeln bei Indices
 * Die Spalte wird häufig als Suchbedingung in Abfragen verwendet.
 * Die Spalte wird häufig als Join-Bedingung zur Verbindung unterschiedlicher Tabellen verwendet.
 * Die Spalte enthält einen großen Bereich an unterschiedlichen Werten (hohe Selektivität).
@@ -220,7 +220,7 @@ CREATE [UNIQUE] INDEX
 CREATE SEQUENCE <seq-name>
     INCREMENT BY <number>
     START WITH <number>
-    MAXVALUE <number> / NOMAXVALUE
+    MAXVALUE <number>     --or NOMAXVALUE
     MINVALUE <number>
     CYCLE / NOCYCLE
     CACHE <number>        -- caches n values
@@ -242,11 +242,11 @@ WHERE ...
 ```
 ### 2.13. GRANT-Anweisung
 ````sql
-GRANT <Privileg> 
+GRANT <Permission> 
 ON <Table-name / View-name> 
 TO <PUBLIC / Username>
 ````
-Privilegien 
+Permissions 
 * ALL
 * SELECT
 * DELETE
@@ -260,7 +260,7 @@ Privilegien
 
 ## 3. Join Table
 ### 3.1 Inner-Join ⋈ (FROM A [INNER] JOIN B ON ...)
-The INNER JOIN keyword only selects rows from both the tables if the condition is satisfied.
+The INNER JOIN keyword only selects matching rows from both tables if the condition is met.
 
 ![image](./images/SQL-Join.webp)
 ### 3.2. Left-Join ⟕ (FROM A LEFT JOIN B ON ...)
@@ -275,7 +275,7 @@ Die linke Tabelle wird übernommen und mit zusätzlichen Informationen aus der r
 * Matches rows where conditions meet.
 * Fills NULLs where no match exists.
 * Combines results of LEFT JOIN + RIGHT JOIN.
-* Can be used sequentially for multiple tables.
+* Can be used sequentially for multiple tables. 
 
 ![image](./images/Full_Join.webp)
 
