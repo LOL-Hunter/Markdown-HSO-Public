@@ -11,6 +11,8 @@
 ### 2.1. ER-Modell
 * Es kann aus dem DB-Schema nicht mehr eindeutig das ER-Modell ermittelt werden.
 
+![Image](./images/bez_mit_attr.kdbx)
+
 ## 2. SQL
 ### 2.1. Basic Syntax
 #### 2.1.1. SELECT
@@ -106,7 +108,7 @@ ORDER BY Verkaufspreis, artikel_typ
 Alle Befehle werden ausgeführt, wenn ein Fehler auftritt wird nur dieser Befehl nicht ausgeführt.
 #### 2.3.2. DEFERRED
 Die Befehle werden erst beim COMMIT ausgeführt, bei auftritt eines Fehlers wird ein ROLLBACK durchgeführt.
-### 2.4. CONSTRAINTS
+### 2.3. CONSTRAINTS
 * NULL / NOT NULL (Spalte muss reale Werte enthalten)
 * DEFAULT <value> (Wenn bei INSERT INTO der Wert nicht agegeben wird)
 * UNIQUE KEY (keine Duplikate)
@@ -141,19 +143,19 @@ ALTER TABLE <table-name>
 ADD CONSTRAINT <contr-name> FORAIGN KEY (<pr-key>, [...])
 REFERENCES <table-name>(<spalte-1>, [...]);
 ```
-### 2.6. DROP-Anweisung
+### 2.4. DROP-Anweisung
 ```sql
 DROP TABLE <name>;
 DROP TABLE <name> CASCADE CONSTRAINT; -- Deletes all foreign keys that reference the table to be dropped, then drops the table
 ```
-### 2.7. DELETE-FROM-Anweisung
+### 2.5. DELETE-FROM-Anweisung
 ```sql
 DELETE FROM <table-name>
 WHERE <Bedingung>
 
 DELETE * FROM <table-name>
 ```
-### 2.8. ALTER-Anweisung
+### 2.6. ALTER-Anweisung
 ```sql
 -- Spalten Bearbeiten
 ALTER TABLE <name> ADD (<Spalten-name>  <data-type>)
@@ -167,7 +169,7 @@ ALTER TABLE <name> MODIFY
 ALTER TABLE <name> ENABLE 
 ALTER TABLE <name> DISABLE 
 ```
-### 2.9. INSERT-Anweisung
+### 2.7. INSERT-Anweisung
 ```sql
 -- Angabe aller Spalten
 INSERT INTO <table-name>
@@ -183,7 +185,7 @@ INSERT INTO <table-name> (spalte-1, ...)
     FROM ...
     WHERE ...
 ```
-### 2.10. UPDATE-Anweisung
+### 2.8. UPDATE-Anweisung
 ```sql
 UPDATE <table-name> 
 SET <table-column> = 100 --or SET <table-column> = <table-column> * 100
@@ -192,18 +194,18 @@ WHERE <table-column> = 5;
 UPDATE <table-name>
 SET Zeitstempel = SYSDATE;
 ```
-### 2.11. RENAME-Anweisung
+### 2.9. RENAME-Anweisung
 ```sql
 RENAME <old-table-name> TO <new-table-name>;
 ```
-### 2.5. CREATE-Table-Anweisung
+### 2.10. CREATE-Table-Anweisung
 ```sql
 CREATE TABLE <table-name>(
     <attr-name> <type>,
     ...
 );
 ```
-### 2.9. CREATE-INDEX-Anweisung
+### 2.11. CREATE-INDEX-Anweisung
 ```sql
 CREATE [UNIQUE] INDEX
 <index-name> ON <table-name>
@@ -215,7 +217,7 @@ CREATE [UNIQUE] INDEX
 * Die Spalte enthält einen großen Bereich an unterschiedlichen Werten (hohe Selektivität).
 * Die Tabelle hat viele Tupel.
 * Die Spalte gehört nicht zum Primär- oder Eindeutigkeitsschlüssel.
-### 2.10. CREATE-SEQUENCE-Anweisung
+### 2.12. CREATE-SEQUENCE-Anweisung
 ```sql
 CREATE SEQUENCE <seq-name>
     INCREMENT BY <number>
@@ -229,7 +231,7 @@ CREATE SEQUENCE <seq-name>
 <seq-name>.CURVAL
 
 ```
-### 2.12. VIEWs
+### 2.13. VIEWs
 * View ist eine "künstliche" Tabelle, die eine SQL-Abfrage darstellt.
 * Materialisierte Sicht: Ergebnistabelle wird unter einem eigenen Name dauerhaft gespeichert.
 * Virtuelle Sicht: Ergebnistabelle wird unter einem eigenen Namen bereitgestellt und bei jedem Abruf erneut erstellt
@@ -240,7 +242,7 @@ SELECT ...
 FROM ...
 WHERE ...
 ```
-### 2.13. GRANT-Anweisung
+### 2.14. GRANT-Anweisung
 ````sql
 GRANT <Permission> 
 ON <Table-name / View-name> 
@@ -253,7 +255,7 @@ Permissions
 * UPDATE 
 * UPDATE (Spalten-Name, ...)
 * INSERT
-### 2.12. Combine-Selects
+### 2.15. Combine-Selects
 * UNION Kombinieren von Result-Set von zwei oder mehr SELECT-Anweisungen
 * MINUS Einträge von Select-1 ohne die Einträge von Select-2
 * INTERSECT Schnittmenge von Select-1 und Select-2
@@ -278,15 +280,12 @@ Die linke Tabelle wird übernommen und mit zusätzlichen Informationen aus der r
 * Can be used sequentially for multiple tables. 
 
 ![image](./images/Full_Join.webp)
-
 ### 3.4. Natural-Join (FROM A NATURAL JOIN B)
 * Nicht Empfohlen!
 * FROM <Tabelle-1>, <Tabelle-2>
 * FROM <Tabelle-1> JOIN <Tabelle-2>
 * Match equal columns automatically
 * Kartesisches-Produkt (Jedes-mit-Jedem)
-
-
 ### 2.5. Theta-Join
 In conditional join, the join condition can include <, >, <=, >=, ? operators in addition to the '=' operator.
 ### 2.6. Equi-Join
@@ -324,7 +323,6 @@ int changes = stat.executeUpdate("");
 // SELECT ...
 ResultSet rs = stat.executeQuery("");
 ```
-
 ### 5.3. Prepared Statements
 ```java
 // Alle SQL Queries sind möglich.
@@ -343,7 +341,6 @@ int changes = pstat.executeUpdate();
 // SELECT ...
 ResultSet rs = pstat.executeQuery();
 ```
-
 ### 5.4. Result-Set
 ```java
 while (result.next()){
@@ -361,3 +358,13 @@ if (result.isBeforeFirst()) {
     result.next();
 }
 ````
+### 5.6. absolute
+```sql
+Statement statement = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE);
+
+ResultSet set = statement.executeQuery("SELECT * FROM ...");
+
+set.absolute(9); // Neunte Zeile
+
+int i = set.getInt(1);
+```
