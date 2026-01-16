@@ -8,10 +8,12 @@
 * Attribut -> Spaltenüberschrift
 * Relationenschemata -> Ein Relationenschema R(A1, ...), bezeichnet eine Menge von Attributen.
 * Relation -> Tabelle
+* Mutating-Table-Problem: In Row-Triggern kein Zugriff auf die Tabelle,
+für die der Trigger definiert ist.
 ### 2.1. ER-Modell
 * Es kann aus dem DB-Schema nicht mehr eindeutig das ER-Modell ermittelt werden.
 
-![Image](./images/bez_mit_attr.kdbx)
+![Image](./images/bez_mit_attr.png)
 
 ## 2. SQL
 ### 2.1. Basic Syntax
