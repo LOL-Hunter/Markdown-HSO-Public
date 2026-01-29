@@ -10,10 +10,14 @@
 * Relation -> Tabelle
 * Mutating-Table-Problem: In Row-Triggern kein Zugriff auf die Tabelle,
 für die der Trigger definiert ist.
+
+
 ### 2.1. ER-Modell
 * Es kann aus dem DB-Schema nicht mehr eindeutig das ER-Modell ermittelt werden.
 
 ![Image](./images/bez_mit_attr.png)
+
+<div style="page-break-after: always"></div>
 
 ## 2. SQL
 ### 2.1. Basic Syntax
@@ -80,6 +84,9 @@ WHERE Gehalt BETWEEN 3000 AND 6000;
 ```sql
 WHERE EXISTS (SELECT ProductName FROM Products WHERE Products.supplierID = Suppliers.supplierID AND Price < 20); 
 ```
+
+<div style="page-break-after: always"></div>
+
 #### 2.1.4. GROUP-BY
 * wird verwendet, um identische Daten anhand einer oder mehrerer Spalten in Gruppen zu ordnen.
 * Es können im Select-Statement nur Attribute verwendet werden, die auch im Group-By-Statement vorkommen.
@@ -147,6 +154,8 @@ ADD CONSTRAINT <contr-name> FORAIGN KEY (<pr-key>, [...])
 REFERENCES <table-name>(<spalte-1>, [...]);
 ```
 
+<div style="page-break-after: always"></div>
+
 ```sql
 CREATE TABLE Enroll (
     sno INT,
@@ -185,6 +194,9 @@ ALTER TABLE <name> DROP (<Spalten-name>)
 ALTER TABLE <name> ADD CONSTRAINT <cstr-name> ...
 ALTER TABLE <name> DROP CONSTRAINT <cstr-name> 
 ```
+
+<div style="page-break-after: always"></div>
+
 ### 2.7. INSERT-Anweisung
 ```sql
 -- Angabe aller Spalten
@@ -258,6 +270,9 @@ SELECT ...
 FROM ...
 WHERE ...
 ```
+
+<div style="page-break-after: always"></div>
+
 ### 2.14. GRANT-Anweisung
 ````sql
 GRANT <Permission> 
@@ -280,6 +295,9 @@ SELECT column_name(s) FROM table1
 UNION
 SELECT column_name(s) FROM table2; 
 ```
+
+<div style="page-break-after: always"></div>
+
 ## 3. Join Table
 ### 3.1 Inner-Join ⋈ (FROM A [INNER] JOIN B ON ...)
 The INNER JOIN keyword only selects matching rows from both tables if the condition is met.
@@ -292,6 +310,9 @@ Die linke Tabelle wird übernommen und mit zusätzlichen Informationen aus der r
 * Non-matching rows in the right table are represented as NULL.
 
 ![image](./images/Left_Join.webp)
+
+<div style="page-break-after: always"></div>
+
 ### 3.3. Full-Outer-Join ⟗ (FROM A FULL JOIN B ON ...)
 * Retrieves all rows from both tables.
 * Matches rows where conditions meet.
@@ -310,6 +331,9 @@ Die linke Tabelle wird übernommen und mit zusätzlichen Informationen aus der r
 In conditional join, the join condition can include <, >, <=, >=, ? operators in addition to the '=' operator.
 ### 2.6. Equi-Join
 Equi Join is a type of inner join where the join condition uses the equality operator ('=') between columns.
+
+
+<div style="page-break-after: always"></div>
 
 ## 4. Normalformen
 ### 4.1. 1.Normalform
@@ -343,17 +367,17 @@ int changes = stat.executeUpdate("");
 // SELECT ...
 ResultSet rs = stat.executeQuery("");
 ```
+
+<div style="page-break-after: always"></div>
+
 ### 5.3. Prepared Statements
 ```java
 // Alle SQL Queries sind möglich.
 // Platzhalter mit ?
 PreparedStatement pstat = con.prepareStatement("SELECT * FROM spieler  WHERE spieler.nachname=?");
 
-// set ? Parameters
 pstat.setString(1, "Uwe");
-// pstat.setBlob(2, ...)
-// pstat.setInt(...)
-// ...
+// pstat.setBlob(2, ...) | pstat.setInt(...)
 
 // ALTER, CREATE, INSERT, ... (ändert werte in DB)
 int changes = pstat.executeUpdate();
