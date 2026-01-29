@@ -2,7 +2,7 @@
 
 ## 1. Begriffe
 * SQL(Structured Query Language)
-* DDL(Data Definition Laguage): Besteht aus SQL Befehlen die genutzt werden für Definition, Altering, Deleting.
+* DDL(Data Definition Language): Besteht aus SQL Befehlen die genutzt werden für Definition, Altering, Deleting.
 * DCL(Data Control Language): Teil einer Datenbanksprache, der verwendet wird, um Berechtigungen zu vergeben oder zu entziehen.
 * DML(Data Modeling Language): Sprache oder Sprachteile für das Abfragen, Einfügen, Ändern oder Löschen von Nutzdaten.
 * Attribut -> Spaltenüberschrift
@@ -78,10 +78,11 @@ WHERE Gehalt BETWEEN 3000 AND 6000;
 ##### EXISTS-Anweisung
 * Die EXISTS-Bedingung ist wahr, wenn die Unterabfrage mindestens eine Zeile liefert.
 ```sql
-WHERE EXISTS (SELECT ProductName FROM Products WHERE Products.SupplierID = Suppliers.supplierID AND Price < 20); 
+WHERE EXISTS (SELECT ProductName FROM Products WHERE Products.supplierID = Suppliers.supplierID AND Price < 20); 
 ```
 #### 2.1.4. GROUP-BY
-* wird verwendet, um identische Daten anhand einer oder mehrerer Spalten in Gruppen zu ordnen. 
+* wird verwendet, um identische Daten anhand einer oder mehrerer Spalten in Gruppen zu ordnen.
+* Es können im Select-Statement nur Attribute verwendet werden, die auch im Group-By-Statement vorkommen.
 * häufig mit Gruppenfunktionen wie COUNT(), SUM(), ... verwendet, um Berechnungen für jede Datengruppe durchzuführen.
 ```sql
 SELECT Student, SUM(Score)
@@ -103,7 +104,6 @@ ORDER BY Verkaufspreis [ASC | DESC]
 ORDER BY Verkaufspreis, artikel_typ
 ```
 #### 2.1.5 GROUP-BY / HAVING
-* kein WHERE-Ausdruck beim Benutzen vom GROUP-BY. HAVING nutzen.
 * Ausgabe wird über die GROUP-BY-Spalten aufsteigend sortiert.
 ### 2.2. Fehler-Handling
 #### 2.3.1. IMMEDIATE
@@ -117,6 +117,7 @@ Die Befehle werden erst beim COMMIT ausgeführt, bei auftritt eines Fehlers wird
 * PRIMARY KEY (UNIQUE KEY + NOT NULL)
 * FOREIGN KEY (Referenziert einen PK einer anderen Tabelle.)
 * CHECK (Einfache Bedingungen)
+* ... ON DELETE CASCADE (Here the parent tables are Student and Course whereas the child table is Enroll. If a student drops from the course or a course is removed from the offering list it must affect the child table also.)
 
 ```sql
 CREATE TABLE test(
@@ -145,6 +146,23 @@ ALTER TABLE <table-name>
 ADD CONSTRAINT <contr-name> FORAIGN KEY (<pr-key>, [...])
 REFERENCES <table-name>(<spalte-1>, [...]);
 ```
+
+```sql
+CREATE TABLE Enroll (
+    sno INT,
+    cno INT,
+    jdate date,
+    PRIMARY KEY(sno,cno),
+    FOREIGN KEY(sno) 
+        REFERENCES Student(sno)
+        ON DELETE CASCADE
+    FOREIGN KEY(cno) 
+        REFERENCES Course(cno)
+        ON DELETE CASCADE
+);
+```
+
+
 ### 2.4. DROP-Anweisung
 ```sql
 DROP TABLE <name>;
@@ -155,7 +173,7 @@ DROP TABLE <name> CASCADE CONSTRAINT; -- Deletes all foreign keys that reference
 DELETE FROM <table-name>
 WHERE <Bedingung>
 
-DELETE * FROM <table-name>
+DELETE FROM <table-name>
 ```
 ### 2.6. ALTER-Anweisung
 ```sql
@@ -165,11 +183,7 @@ ALTER TABLE <name> DROP (<Spalten-name>)
 
 -- Constraints Bearbeiten
 ALTER TABLE <name> ADD CONSTRAINT <cstr-name> ...
-ALTER TABLE <name> DROP CONSTRAINT <cstr-name>
-
-ALTER TABLE <name> MODIFY 
-ALTER TABLE <name> ENABLE 
-ALTER TABLE <name> DISABLE 
+ALTER TABLE <name> DROP CONSTRAINT <cstr-name> 
 ```
 ### 2.7. INSERT-Anweisung
 ```sql
@@ -183,7 +197,7 @@ VALUES (...);
 
 -- Oder aus anderer Tabelle
 INSERT INTO <table-name> (spalte-1, ...)
-    SELECT [DISTINCT] (spalte-1, ...)
+    SELECT [DISTINCT] spalte-1 [, ...]
     FROM ...
     WHERE ...
 ```
@@ -218,7 +232,7 @@ CREATE [UNIQUE] INDEX
 * Die Spalte wird häufig als Join-Bedingung zur Verbindung unterschiedlicher Tabellen verwendet.
 * Die Spalte enthält einen großen Bereich an unterschiedlichen Werten (hohe Selektivität).
 * Die Tabelle hat viele Tupel.
-* Die Spalte gehört nicht zum Primär- oder Eindeutigkeitsschlüssel.
+* Die Spalte gehört nicht zum Primärschlüssel.
 ### 2.12. CREATE-SEQUENCE-Anweisung
 ```sql
 CREATE SEQUENCE <seq-name>
@@ -261,7 +275,11 @@ Permissions
 * UNION Kombinieren von Result-Set von zwei oder mehr SELECT-Anweisungen
 * MINUS Einträge von Select-1 ohne die Einträge von Select-2
 * INTERSECT Schnittmenge von Select-1 und Select-2
-
+```sql
+SELECT column_name(s) FROM table1
+UNION
+SELECT column_name(s) FROM table2; 
+```
 ## 3. Join Table
 ### 3.1 Inner-Join ⋈ (FROM A [INNER] JOIN B ON ...)
 The INNER JOIN keyword only selects matching rows from both tables if the condition is met.
@@ -370,3 +388,25 @@ set.absolute(9); // Neunte Zeile
 
 int i = set.getInt(1);
 ```
+## 6. Transactions
+
+* Start of Transaction: A transaction begins when the first executable SQL statement is encountered.
+* End of Transaction: COMMIT-Statement or the database issues an implicit COMMIT statement before and after every DDL (CREATE, DROP, RENAME, or ALTER) statement.
+
+1. dirty Read: A Dirty Read in SQL occurs when a transaction reads data that has been modified by another transaction, but not yet committed.
+2. Non Repeatable read: Non-repeatable read occurs when a transaction reads the same row twice and gets a different value each time.
+3. Phantom Read: Phantom Read occurs when two same queries are executed, but the rows retrieved by the two, are different.
+
+### The four standard isolation levels are: 
+1. Read Uncommitted
+   * Lowest level of isolation, transaction can see uncommitted changes made by other transactions.
+2. Read Committed
+   * a transaction can only see changes made by other committed transactions.
+3. Repeatable Read
+   * guarantees that a transaction will see the same data throughout its duration, even if other transactions commit changes to the data.
+4. Serializable
+   * write locks are acquired within a transaction and are held until the transaction commits or rolls back for both read and write operations.
+   * a row that has been read by one transaction can be read, but not updated or deleted by any other transaction until the first transaction completes.
+   * Similarly, a row that has been inserted, updated, or deleted by a transaction cannot be accessed in any way by any other transaction until the first transaction completes. 
+
+![Image](./images/isolationlvl.png)
